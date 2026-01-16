@@ -24,3 +24,11 @@ Route::post('/login', function (Request $request) {
         'user' => Auth::user(),
     ]);
 });
+
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return response()->noContent();
+});

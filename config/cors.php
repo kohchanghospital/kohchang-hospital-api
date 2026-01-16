@@ -12,7 +12,8 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'http://localhost:5173',
+        'http://localhost:5173', // Vue.js
+        'http://localhost:3000', // Next.js
     ],
 
     'allowed_headers' => ['*'],
