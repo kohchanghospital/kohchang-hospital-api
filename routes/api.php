@@ -36,6 +36,7 @@ Route::get('/announcement-types', [AnnouncementTypeController::class, 'index']);
 Route::get('/announcements', [AnnouncementController::class, 'index']);
 Route::post('/announcements', [AnnouncementController::class, 'store']);
 Route::get('/announcements/file/{id}', [AnnouncementController::class, 'download']);
+Route::put('/announcements/{id}', [AnnouncementController::class, 'update']);
 
 Route::get('/test', function () {
     return response()->json([

@@ -18,7 +18,7 @@ class AnnouncementController extends Controller
         $keyword = $request->input('q');
 
         $query = Announcement::with('type')
-            ->orderBy('updated_at', 'desc');
+            ->orderBy('created_at', 'desc');
 
         // 🔥 filter ตาม type
         if ($typeId) {
@@ -80,6 +80,31 @@ class AnnouncementController extends Controller
             ],
         ], 201);
     }
+
+    public function update(Request $request, $id)
+    {
+        $announcement = Announcement::findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'type_id' => 'required|exists:announcement_types,id',
+            'file' => 'nullable|file|mimes:pdf|max:10240',
+        ]);
+
+        if ($request->hasFile('file')) {
+            Storage::disk('public')->delete($announcement->file_path);
+            $path = $request->file('file')->store('announcements', 'public');
+            $announcement->file_path = $path;
+        }
+
+        $announcement->update([
+            'title' => $validated['title'],
+            'type_id' => $validated['type_id'],
+        ]);
+
+        return response()->json(['status' => true]);
+    }
+
     public function download($id)
     {
         $announcement = Announcement::findOrFail($id);
