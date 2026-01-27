@@ -40,6 +40,31 @@ class AnnouncementController extends Controller
         ]);
     }
 
+    public function getLatestAnnouncement(Request $request)
+    {
+        $num  = $request->input('num',3);
+        $news = Announcement::with('type')
+            ->where('type_id', 1)
+            ->orderBy('created_at', 'desc')
+            ->take($num)
+            ->get();
+
+        $procurement = Announcement::with('type')
+            ->where('type_id', 2)
+            ->orderBy('created_at', 'desc')
+            ->take($num)
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'news' => $news,
+                'procurement' => $procurement
+            ],
+        ]);
+    }
+
+
     public function store(Request $request)
     {
         $validated = $request->validate(
