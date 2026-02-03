@@ -15,14 +15,18 @@ class ContentController extends Controller
         $lang = $request->query('lang', 'th');
 
         $content = Content::where('slug', $slug)
-            ->with(['translation' => fn($q) => $q->where('lang', $lang)])
+            ->with('translations')
             ->firstOrFail();
+
+        $translation =
+            $content->translations->firstWhere('lang', $lang)
+            ?? $content->translations->firstWhere('lang', 'th');
 
         return response()->json([
             'slug' => $content->slug,
             'type' => $content->type,
-            'title' => optional($content->translation)->title,
-            'body' => optional($content->translation)->body,
+            'title' => $translation?->title,
+            'body' => $translation?->body,
         ]);
     }
 
@@ -70,7 +74,7 @@ class ContentController extends Controller
             ContentTranslation::where('content_id', $item['content_id'])
                 ->where('lang', $request->lang)
                 ->update([
-                    'body' => Purifier::clean($body, 'ckeditor')
+                    'body' => Purifier::clean($body, 'tinymce')
                 ]);
         }
 

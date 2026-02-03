@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Api\AnnouncementTypeController;
 use App\Http\Controllers\Api\AnnouncementController;
+use App\Http\Controllers\Api\KnowledgeController;
 use App\Http\Controllers\Api\ContentController;
 use Mews\Purifier\Facades\Purifier;
 
@@ -40,6 +41,12 @@ Route::get('/announcements/latest', [AnnouncementController::class, 'getLatestAn
 Route::post('/announcements', [AnnouncementController::class, 'store']);
 Route::get('/announcements/file/{id}', [AnnouncementController::class, 'download']);
 Route::put('/announcements/{id}', [AnnouncementController::class, 'update']);
+
+Route::get('/knowledges', [KnowledgeController::class, 'index']);
+Route::get('/knowledges/latest', [KnowledgeController::class, 'getLatestKnowledge']);
+Route::post('/knowledges', [KnowledgeController::class, 'store']);
+Route::get('/knowledges/file/{id}', [KnowledgeController::class, 'download']);
+Route::put('/knowledges/{id}', [KnowledgeController::class, 'update']);
 
 Route::get('/contents/type/{type}', [ContentController::class, 'getByType']);
 Route::get('/contents/{slug}', [ContentController::class, 'show']);
