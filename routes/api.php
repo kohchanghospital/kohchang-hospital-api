@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\AnnouncementTypeController;
 use App\Http\Controllers\Api\AnnouncementController;
 use App\Http\Controllers\Api\KnowledgeController;
 use App\Http\Controllers\Api\ContentController;
+use App\Http\Controllers\Api\DepartmentController;
+use App\Http\Controllers\Api\ExecutiveController;
 use Mews\Purifier\Facades\Purifier;
 
 Route::post('/login', function (Request $request) {
@@ -51,6 +53,20 @@ Route::put('/knowledges/{id}', [KnowledgeController::class, 'update']);
 Route::get('/contents/type/{type}', [ContentController::class, 'getByType']);
 Route::get('/contents/{slug}', [ContentController::class, 'show']);
 Route::put('/contents/type/{type}', [ContentController::class, 'updateByType']);
+
+Route::get('/departments', [DepartmentController::class, 'index']);
+Route::post('/departments', [DepartmentController::class, 'store']);
+Route::post('/departments/reorder', [DepartmentController::class, 'reorder']);
+Route::put('/departments/{id}', [DepartmentController::class, 'update']);
+Route::delete('/departments/{id}', [DepartmentController::class, 'destroy']);
+
+Route::get('/executives', [ExecutiveController::class, 'index']);
+Route::post('/executives', [ExecutiveController::class, 'store']);
+Route::get('/executives/reindex', [ExecutiveController::class, 'reindex']);
+Route::put('/executives/{id}', [ExecutiveController::class, 'update']);
+Route::delete('/executives/{id}', [ExecutiveController::class, 'destroy']);
+
+
 
 Route::get('/test-purifier', function () {
     $html = '<script>alert(1)</script><p>โรงพยาบาลเกาะช้าง</p>';
