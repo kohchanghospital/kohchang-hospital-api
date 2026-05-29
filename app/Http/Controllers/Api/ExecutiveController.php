@@ -70,6 +70,7 @@ class ExecutiveController extends Controller
     public function destroy($id)
     {
         $executive = Executive::findOrFail($id);
+        $departmentId = $executive->department_id;
 
         // 🔥 ลบรูปใน storage ด้วย
         if ($executive->image_path) {
@@ -78,38 +79,58 @@ class ExecutiveController extends Controller
 
         $executive->delete();
 
-        return response()->json(['message' => 'deleted']);
+        $remainingExecutives = Executive::where('department_id', $departmentId)
+            ->orderBy('order_no')
+            ->orderBy('id')
+            ->get();
+
+        foreach ($remainingExecutives as $index => $remainingExecutive) {
+            $remainingExecutive->update(['order_no' => $index + 1]);
+        }
+
+        return response()->json([
+            'message' => 'deleted',
+            'executives' => $remainingExecutives->fresh(),
+        ]);
     }
 
     public function reorder(Request $request)
     {
         foreach ($request->executives as $item) {
-            Executive::where('id', $item['id'])
-                ->where('department_id', $request->department_id) // 🔥 กันมั่ว
-                ->update(['order_no' => $item['order_no']]);
+            $query = Executive::where('id', $item['id']);
+
+            if (array_key_exists('department_id', $item)) {
+                if ($item['department_id'] === null) {
+                    $query->whereNull('department_id');
+                } else {
+                    $query->where('department_id', $item['department_id']);
+                }
+            }
+
+            $query->update(['order_no' => $item['order_no']]);
         }
 
         return response()->json(['success' => true]);
     }
 
     public function reindex()
-{
-    $execs = Executive::orderBy('department_id')
-        ->orderBy('order_no')
-        ->get();
+    {
+        $execs = Executive::orderBy('department_id')
+            ->orderBy('order_no')
+            ->get();
 
-    $currentDept = null;
-    $index = 1;
+        $currentDept = null;
+        $index = 1;
 
-    foreach ($execs as $e) {
-        if ($currentDept != $e->department_id) {
-            $currentDept = $e->department_id;
-            $index = 1;
+        foreach ($execs as $e) {
+            if ($currentDept != $e->department_id) {
+                $currentDept = $e->department_id;
+                $index = 1;
+            }
+
+            $e->update(['order_no' => $index++]);
         }
 
-        $e->update(['order_no' => $index++]);
+        return response()->json(['success' => true]);
     }
-
-    return response()->json(['success' => true]);
-}
 }

@@ -62,6 +62,7 @@ Route::delete('/departments/{id}', [DepartmentController::class, 'destroy']);
 
 Route::get('/executives', [ExecutiveController::class, 'index']);
 Route::post('/executives', [ExecutiveController::class, 'store']);
+Route::post('/executives/reorder', [ExecutiveController::class, 'reorder']);
 Route::get('/executives/reindex', [ExecutiveController::class, 'reindex']);
 Route::put('/executives/{id}', [ExecutiveController::class, 'update']);
 Route::delete('/executives/{id}', [ExecutiveController::class, 'destroy']);

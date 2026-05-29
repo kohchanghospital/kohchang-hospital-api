@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Department;
+use App\Models\Executive;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class DepartmentController extends Controller
 {
@@ -38,15 +41,22 @@ class DepartmentController extends Controller
 
     public function destroy($id)
     {
-        $exists = \DB::table('executives')->where('department_id', $id)->exists();
+        $dept = Department::findOrFail($id);
 
-        if ($exists) {
-            return response()->json([
-                'message' => 'มีข้อมูลใช้งานอยู่'
-            ], 400);
-        }
+        DB::transaction(function () use ($dept) {
+            $executives = Executive::where('department_id', $dept->id)->get();
 
-        Department::destroy($id);
+            foreach ($executives as $executive) {
+                if ($executive->image_path) {
+                    Storage::disk('public')->delete($executive->image_path);
+                }
+
+                $executive->delete();
+            }
+
+            $dept->delete();
+        });
+
         return response()->json(['success' => true]);
     }
 
