@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\KnowledgeController;
 use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\ExecutiveController;
+use App\Http\Controllers\Api\DonationSettingController;
 use Mews\Purifier\Facades\Purifier;
 
 Route::post('/login', function (Request $request) {
@@ -53,6 +54,9 @@ Route::put('/knowledges/{id}', [KnowledgeController::class, 'update']);
 Route::get('/contents/type/{type}', [ContentController::class, 'getByType']);
 Route::get('/contents/{slug}', [ContentController::class, 'show']);
 Route::put('/contents/type/{type}', [ContentController::class, 'updateByType']);
+
+Route::get('/donation/settings', [DonationSettingController::class, 'show']);
+Route::put('/donation/settings', [DonationSettingController::class, 'update']);
 
 Route::get('/departments', [DepartmentController::class, 'index']);
 Route::post('/departments', [DepartmentController::class, 'store']);
