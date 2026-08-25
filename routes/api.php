@@ -11,6 +11,9 @@ use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\ExecutiveController;
 use App\Http\Controllers\Api\DonationSettingController;
+use App\Http\Controllers\Api\ActivityController;
+use App\Http\Controllers\Api\VehicleMasterController;
+use App\Http\Controllers\Api\VehicleScheduleController;
 use Mews\Purifier\Facades\Purifier;
 
 Route::post('/login', function (Request $request) {
@@ -32,6 +35,24 @@ Route::post('/login', function (Request $request) {
 
 Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
     return $request->user();
+});
+
+Route::get('/activities', [ActivityController::class, 'index']);
+Route::get('/activities/{activity}', [ActivityController::class, 'show']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/activities', [ActivityController::class, 'store']);
+    Route::put('/activities/{activity}', [ActivityController::class, 'update']);
+    Route::delete('/activities/{activity}', [ActivityController::class, 'destroy']);
+});
+
+Route::get('/vehicle-schedules', [VehicleScheduleController::class, 'index']);
+Route::get('/vehicle-schedules/{vehicleSchedule}', [VehicleScheduleController::class, 'show']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/drivers', [VehicleMasterController::class, 'drivers']);
+    Route::get('/vehicles', [VehicleMasterController::class, 'vehicles']);
+    Route::post('/vehicle-schedules', [VehicleScheduleController::class, 'store']);
+    Route::put('/vehicle-schedules/{vehicleSchedule}', [VehicleScheduleController::class, 'update']);
+    Route::delete('/vehicle-schedules/{vehicleSchedule}', [VehicleScheduleController::class, 'destroy']);
 });
 
 Route::get('/user', function (Request $request) {
