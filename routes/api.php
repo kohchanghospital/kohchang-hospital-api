@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\VehicleMasterController;
 use App\Http\Controllers\Api\VehicleScheduleController;
 use App\Http\Controllers\Api\OrganDonationController;
 use App\Http\Controllers\Api\WebsitePolicyController;
+use App\Http\Controllers\Api\SiteSettingController;
 use Mews\Purifier\Facades\Purifier;
 
 Route::post('/login', function (Request $request) {
@@ -100,6 +101,12 @@ Route::get('/policies/{policyType}', [WebsitePolicyController::class, 'publicSho
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/policies', [WebsitePolicyController::class, 'adminIndex']);
     Route::put('/admin/policies/{policyType}', [WebsitePolicyController::class, 'update']);
+});
+
+Route::get('/site-settings', [SiteSettingController::class, 'publicIndex']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/admin/site-settings', [SiteSettingController::class, 'adminIndex']);
+    Route::put('/admin/site-settings', [SiteSettingController::class, 'update']);
 });
 
 Route::get('/departments', [DepartmentController::class, 'index']);
