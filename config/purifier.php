@@ -46,6 +46,7 @@ return [
         ],
         'tinymce' => [
     'HTML.Allowed' => 'div,b,strong,i,em,u,s,
+                        a[href|title|target],
                         ul,ol,li,
                         p[style],br,hr,
                         span[style],

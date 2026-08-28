@@ -14,6 +14,8 @@ use App\Http\Controllers\Api\DonationSettingController;
 use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\VehicleMasterController;
 use App\Http\Controllers\Api\VehicleScheduleController;
+use App\Http\Controllers\Api\OrganDonationController;
+use App\Http\Controllers\Api\WebsitePolicyController;
 use Mews\Purifier\Facades\Purifier;
 
 Route::post('/login', function (Request $request) {
@@ -49,7 +51,15 @@ Route::get('/vehicle-schedules', [VehicleScheduleController::class, 'index']);
 Route::get('/vehicle-schedules/{vehicleSchedule}', [VehicleScheduleController::class, 'show']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/drivers', [VehicleMasterController::class, 'drivers']);
+    Route::post('/drivers', [VehicleMasterController::class, 'storeDriver']);
+    Route::put('/drivers/{driver}', [VehicleMasterController::class, 'updateDriver']);
+    Route::delete('/drivers/{driver}', [VehicleMasterController::class, 'destroyDriver']);
+    Route::post('/drivers/reorder', [VehicleMasterController::class, 'reorderDrivers']);
     Route::get('/vehicles', [VehicleMasterController::class, 'vehicles']);
+    Route::post('/vehicles', [VehicleMasterController::class, 'storeVehicle']);
+    Route::put('/vehicles/{vehicle}', [VehicleMasterController::class, 'updateVehicle']);
+    Route::delete('/vehicles/{vehicle}', [VehicleMasterController::class, 'destroyVehicle']);
+    Route::post('/vehicles/reorder', [VehicleMasterController::class, 'reorderVehicles']);
     Route::post('/vehicle-schedules', [VehicleScheduleController::class, 'store']);
     Route::put('/vehicle-schedules/{vehicleSchedule}', [VehicleScheduleController::class, 'update']);
     Route::delete('/vehicle-schedules/{vehicleSchedule}', [VehicleScheduleController::class, 'destroy']);
@@ -78,6 +88,19 @@ Route::put('/contents/type/{type}', [ContentController::class, 'updateByType']);
 
 Route::get('/donation/settings', [DonationSettingController::class, 'show']);
 Route::put('/donation/settings', [DonationSettingController::class, 'update']);
+
+Route::get('/organ-donation', [OrganDonationController::class, 'showPublic']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/admin/organ-donation', [OrganDonationController::class, 'showAdmin']);
+    Route::put('/admin/organ-donation', [OrganDonationController::class, 'update']);
+});
+
+Route::get('/policies', [WebsitePolicyController::class, 'publicIndex']);
+Route::get('/policies/{policyType}', [WebsitePolicyController::class, 'publicShow']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/admin/policies', [WebsitePolicyController::class, 'adminIndex']);
+    Route::put('/admin/policies/{policyType}', [WebsitePolicyController::class, 'update']);
+});
 
 Route::get('/departments', [DepartmentController::class, 'index']);
 Route::post('/departments', [DepartmentController::class, 'store']);

@@ -25,7 +25,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminUserSeeder::class,
             AnnouncementTypeSeeder::class,
-            ContentSeeder::class
+            ContentSeeder::class,
+            OrganDonationSeeder::class,
+            WebsitePolicySeeder::class,
         ]);
     }
 }
