@@ -46,7 +46,7 @@ class WebsitePolicyApiTest extends TestCase
     public function test_admin_update_sanitizes_html_and_updates_existing_record(): void
     {
         $user = User::factory()->create();
-        $this->actingAs($user);
+        $this->actingAsAdmin($user);
         $this->putJson('/api/admin/policies/privacy_policy', [
             'title_th' => 'นโยบายฉบับปรับปรุง', 'title_en' => 'Updated Privacy Policy',
             'content_th' => '<script>alert(1)</script><h2>หัวข้อ</h2><p><strong>ข้อความ</strong></p>',

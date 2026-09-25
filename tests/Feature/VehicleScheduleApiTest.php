@@ -53,7 +53,7 @@ class VehicleScheduleApiTest extends TestCase
 
     public function test_admin_crud_uses_relations_ordered_details_and_cascade_delete(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAsAdmin(User::factory()->create());
         $this->getJson('/api/drivers')->assertOk()->assertJsonFragment(['name' => 'นายสมชาย ใจดี']);
         $this->getJson('/api/vehicles')->assertOk()->assertJsonFragment(['registration_number' => 'กข 1234 ตราด']);
 
@@ -75,7 +75,7 @@ class VehicleScheduleApiTest extends TestCase
 
     public function test_rejects_vehicle_and_driver_overlaps_but_allows_touching_boundaries(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAsAdmin(User::factory()->create());
         $this->postJson('/api/vehicle-schedules', $this->payload())->assertCreated();
 
         $this->postJson('/api/vehicle-schedules', $this->payload([
@@ -96,7 +96,7 @@ class VehicleScheduleApiTest extends TestCase
 
     public function test_validates_required_fields_time_order_and_visible_range(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAsAdmin(User::factory()->create());
         $this->postJson('/api/vehicle-schedules', $this->payload([
             'schedule_date' => '', 'driver_id' => null, 'vehicle_id' => null,
             'title' => '', 'start_time' => '16:30', 'end_time' => '08:30',

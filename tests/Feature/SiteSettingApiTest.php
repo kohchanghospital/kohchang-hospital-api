@@ -37,7 +37,7 @@ class SiteSettingApiTest extends TestCase
 
     public function test_admin_can_disable_and_enable_the_ribbon_persistently(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAsAdmin(User::factory()->create());
 
         $this->putJson('/api/admin/site-settings', [
             'show_mourning_ribbon' => false,
@@ -59,7 +59,7 @@ class SiteSettingApiTest extends TestCase
 
     public function test_admin_update_requires_a_boolean_value(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAsAdmin(User::factory()->create());
 
         $this->putJson('/api/admin/site-settings', [
             'show_mourning_ribbon' => 'sometimes',

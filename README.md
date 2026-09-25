@@ -57,3 +57,13 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Username login rollout
+
+Run `php artisan migrate --force` to add the nullable, unique `users.username` column. Existing users retain their password, email, and two-factor data. Accounts with a null username cannot sign in until an administrator assigns one. Choose a non-sensitive username for each account and run `php artisan users:assign-username USER_ID USERNAME`; the command validates and normalizes it. Never derive usernames automatically from personal data.
+
+The admin login uses username and password, followed by the mandatory Authenticator challenge or setup. Account information is available through `GET/PUT /api/profile`, password changes through `PUT /api/profile/password`, and existing Authenticator controls through `/api/security/two-factor/*`. These API routes require `auth:sanctum` and `2fa`. The frontend uses `/profile` and `/profile/security`.
+# Website visitor analytics
+
+The public Next.js site sends a heartbeat through its own first-party route. The Laravel API accepts it only with the server-only `ANALYTICS_INGEST_KEY` shared by both deployments. Configure the same random key (at least 32 characters) in each server environment; never use a `NEXT_PUBLIC_` variable for it. Run `php artisan migrate --force` to add `website_visitors` and `website_visitor_days` without changing existing data. `ANALYTICS_TIMEZONE` defaults to `Asia/Bangkok` for daily boundaries.
+
+`POST /api/analytics/heartbeat` accepts only an anonymous UUID and updates its last activity plus a unique daily row. `GET /api/admin/analytics/summary` requires the existing admin session and verified 2FA. Total is the visitor row count, online means activity within five minutes, and today counts daily rows for the Bangkok date. Historical statistics start when tracking is installed; no old visits are inferred.

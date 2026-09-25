@@ -17,6 +17,7 @@ class AdminUserSeeder extends Seeder
             ['email' => 'admin@kohchang.go.th'],
             [
                 'name' => 'Admin',
+                'username' => 'admin',
                 'password' => Hash::make('123456'),
             ]
         );

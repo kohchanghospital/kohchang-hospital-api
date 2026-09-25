@@ -36,7 +36,7 @@ class ActivityApiTest extends TestCase
 
     public function test_admin_crud_preserves_detail_order_and_cascades_delete(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAsAdmin(User::factory()->create());
 
         $created = $this->postJson('/api/activities', $this->payload())
             ->assertCreated()
@@ -62,7 +62,7 @@ class ActivityApiTest extends TestCase
 
     public function test_validates_required_fields_and_time_order(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAsAdmin(User::factory()->create());
 
         $this->postJson('/api/activities', $this->payload([
             'activity_date' => '',

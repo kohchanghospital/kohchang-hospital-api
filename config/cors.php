@@ -7,6 +7,7 @@ return [
         'sanctum/csrf-cookie',
         'login',          // ⭐ เพิ่ม
         'logout',         // (เผื่ออนาคต)
+        'two-factor/*',
     ],
 
     'allowed_methods' => ['*'],

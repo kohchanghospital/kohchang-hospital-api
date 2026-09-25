@@ -27,7 +27,7 @@ class VehicleMasterApiTest extends TestCase
 
     public function test_admin_can_create_edit_delete_and_reorder_drivers(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAsAdmin(User::factory()->create());
         $first = $this->postJson('/api/drivers', ['name' => '  คนขับหนึ่ง  '])->assertCreated()->assertJsonPath('data.name', 'คนขับหนึ่ง')->json('data');
         $second = $this->postJson('/api/drivers', ['name' => 'คนขับสอง'])->assertCreated()->json('data');
 
@@ -40,7 +40,7 @@ class VehicleMasterApiTest extends TestCase
 
     public function test_admin_can_create_edit_delete_and_reorder_vehicles(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAsAdmin(User::factory()->create());
         $first = $this->postJson('/api/vehicles', ['registration_number' => '  กข 1234 ตราด  '])->assertCreated()->assertJsonPath('data.registration_number', 'กข 1234 ตราด')->json('data');
         $second = $this->postJson('/api/vehicles', ['registration_number' => 'นข 5678 ตราด'])->assertCreated()->json('data');
 
@@ -53,7 +53,7 @@ class VehicleMasterApiTest extends TestCase
 
     public function test_referenced_driver_and_vehicle_cannot_be_deleted(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAsAdmin(User::factory()->create());
         $driver = Driver::create(['name' => 'คนขับ']);
         $vehicle = Vehicle::create(['registration_number' => 'กข 1234']);
         VehicleSchedule::create([

@@ -41,7 +41,7 @@ class OrganDonationApiTest extends TestCase
 
     public function test_admin_can_update_page_and_synchronize_repeatable_items(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAsAdmin(User::factory()->create());
         $page = OrganDonationPage::query()->with(['organs', 'qualifications'])->firstOrFail();
 
         $payload = [
@@ -80,7 +80,7 @@ class OrganDonationApiTest extends TestCase
 
     public function test_admin_update_validates_nested_content(): void
     {
-        $this->actingAs(User::factory()->create());
+        $this->actingAsAdmin(User::factory()->create());
 
         $this->putJson('/api/admin/organ-donation', [
             'eyebrow_text' => '',
